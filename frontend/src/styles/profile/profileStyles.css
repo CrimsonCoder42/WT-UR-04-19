@@ -1,0 +1,202 @@
+/* Desktop styles */
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.wildTrackAccount {
+    width: 35%;
+    border-right: 4px solid black;
+    padding-right: 20px;
+}
+
+.wildTrackEditAccount {
+    width: 65%;
+    padding-left: 20px;
+}
+
+.profile-wt-title {
+    color: rgb(52, 142, 71);
+    font-weight: bold;
+}
+
+.my-account-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 90%;
+    width: 100%;
+}
+
+.profile-wt-title {
+    color: rgb(52, 142, 71);
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 24px;
+    line-height: 1.2;
+}
+
+.icon {
+    display: block;
+    margin: 0 auto;
+    font-size: 48px;
+}
+
+h4 {
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 200px; /* or any other desired max width */
+    height: 32px;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 5px;
+}
+
+/* Mobile styles */
+@media only screen and (max-width: 600px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .wildTrackAccount {
+        border: none;
+        padding-right: 0;
+    }
+
+    .wildTrackEditAccount {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .my-account-wrapper {
+        width: 80%;
+    }
+
+    button {
+        margin-bottom: 10px;
+    }
+}
+
+
+
+
+
+
+/*.container {*/
+/*    display: grid;*/
+/*    grid-template-columns: 1fr 1fr;*/
+/*}*/
+
+/*.container > div {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    height: 90vh;*/
+/*}*/
+
+
+/*.Form-label label {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    font-weight: bold;*/
+/*    width: 180px;*/
+/*}*/
+
+/*.my-account-wrapper{*/
+/*    width: 35vw;*/
+/*    borderRight: 3px solid black;*/
+/*    textAlign: center;*/
+/*    height: 764.16px;*/
+/*}*/
+
+/*.Form-label input,*/
+/*.Form-label textarea,*/
+/*.Form-label select {*/
+/*    margin-left: 70px;*/
+/*    width: 75%;*/
+/*    border-color: #d9d9d9;*/
+/*}*/
+
+/*.Form-label textarea {*/
+/*    height: 78px;*/
+/*}*/
+
+/*.Form-label select option {*/
+/*    color: #000;*/
+/*}*/
+
+/*.Form-label button {*/
+/*    margin-right: 20px;*/
+/*}*/
+
+/*h3 {*/
+/*    color: #348e47;*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*.containing {*/
+/*    display: flex;*/
+/*    margin-top: 50px;*/
+/*    margin-left: 150px;*/
+/*}*/
+
+/*.containing button {*/
+/*    margin-right: 20px;*/
+/*}*/
+
+/*.ant-input[disabled] {*/
+/*    background-color: #f5f5f5;*/
+/*    border-color: #d9d9d9;*/
+/*    color: #000;*/
+/*    cursor: not-allowed;*/
+/*}*/
+
+/*.ant-form-item-label > label::after {*/
+/*    display: none;*/
+/*}*/
+
+/*!* Styles for user information section *!*/
+/*.my-account-wrapper {*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    height: 100vh;*/
+/*    width: 40%;*/
+/*}*/
+
+/*.account-heading {*/
+/*    margin-bottom: 50px;*/
+/*    text-align: left;*/
+/*}*/
+
+/*.user-icon {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    margin-bottom: 50px;*/
+/*}*/
+
+/*.user-info {*/
+/*    margin-bottom: 50px;*/
+/*}*/
+
+/*.delete-account-btn {*/
+/*    background-color: red;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    padding: 5px 15px;*/
+/*}*/
