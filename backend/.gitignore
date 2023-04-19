@@ -1,0 +1,27 @@
+# Ignore Python-related files and directories
+*.pyc
+*.pyo
+pycache/
+.Python
+.eggs/
+*.egg-info/
+.installed.cfg
+venv/
+
+# Ignore build-related files and directories
+build/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+
+# Ignore application secrets and configuration files
+app/secure.json
+app/aws.json
+
+# Ignore serverless build artifacts
+.serverless/

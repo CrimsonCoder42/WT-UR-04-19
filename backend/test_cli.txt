@@ -1,0 +1,17 @@
+#entitlement create name=test_me2 action=read action=write action=delete action=write object=media newsletter=true
+#  Create entitlement
+entitlement create name=test_me6 action=read action=write action=delete  object=media newsletter=true
+
+# Delete entitlemenent
+entitlement delete name=test_me6 action=read action=write action=delete action=write object=media newsletter=true
+entitlement delete name=test_me8 action=read action=write action=delete action=write object=media newsletter=true
+entitlement delete name=test_me7 action=read action=write action=delete  object=media newsletter=true
+
+# Create entitlemenets for recursive entitlement testing
+entitlement create name=test_me7 action=read action=write action=delete  object=media newsletter=true
+entitlement create name=test_me8 action=read action=write action=delete action=write object=media newsletter=true
+#  Add recursive entitlements
+entitlement add entitlement_name=test_me7 subentitlement=test_me8
+
+# Add recursive entitlements to a user
+user add entitlement_name=test_me7 user_email=malinda.marcus@example.com
