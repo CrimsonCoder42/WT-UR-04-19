@@ -1,0 +1,110 @@
+on:
+  push:
+    branches:
+      - main
+
+env:
+  ECR_REGISTRY: 221254266614.dkr.ecr.us-east-1.amazonaws.com
+  IMAGE_NAME: user-reg-backend
+  FUNCTION_NAME: test-function-user-reg
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies for React app
+        run: |
+          cd frontend
+          npm install
+
+      - name: Create .env file for React
+        run: |
+          cd frontend
+          touch .env.local
+          # echo REACT_APP_API_URL="https://nga6lztzn8.execute-api.us-east-2.amazonaws.com/_api/v1" >> .env.local
+          # echo DISABLE_ESLINT_PLUGIN=true >> .env.local
+          # echo REACT_APP_S3_BUCKET="wildtrack-user-registration-dev" >> .env.local
+          echo REACT_APP_S3_REGION="us-east-1" >> .env.local
+          # cat .env.local
+          # rm .env.development
+
+      - name: Run build and tests for React app
+        run: |
+          cd frontend
+          npm install
+          npm install -g uuid
+          npm run build
+
+      - name: Install dependencies for linting React app
+        run: |
+          cd frontend
+          npm install eslint eslint-plugin-react --save-dev
+
+      - name: Lint the React app
+        run: |
+          cd frontend
+          npx eslint src
+
+      - name: Check linting status
+        run: |
+          cd frontend
+          npx eslint src || exit 1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy to S3 bucket
+        run: aws s3 sync ./frontend/build/ s3://wildtrack-user-registration-dev --delete
+
+      - name: Delete CloudFront cache
+        run: aws cloudfront create-invalidation --distribution-id E3J74ZTVPWYY38 --paths "/*"
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          BRANCH_TAG: ndp-lambda
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+          IMAGE_NAME: user-reg-backend
+        run: |
+          docker build -t $IMAGE_NAME:$BRANCH_TAG ./backend
+          docker tag $IMAGE_NAME:$BRANCH_TAG $ECR_REGISTRY/$IMAGE_NAME:$BRANCH_TAG
+          docker push $ECR_REGISTRY/$IMAGE_NAME:$BRANCH_TAG
+          echo DOCKER IMAGE::set-output name=image::$ECR_REGISTRY/$IMAGE_NAME:$BRANCH_TAG
+
+      - name: Install Serverless Framework
+        run: |
+          cd backend
+          npm install -g serverless
+
+      - name: Deploy to AWS Lambda
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SERVERLESS_ACCESS_KEY: ${{ secrets.DEV_SERVERLESS_ACCESS_KEY }}
+          AWS_S3_BUCKET: 'wildtrack-user-registration-dev'
+          CONTAINER_IMAGE_NAME: $IMAGE_NAME:$BRANCH_TAG
+          COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
+          COGNITO_APP_CLIENT_ID: ${{ secrets.COGNITO_APP_CLIENT_ID }}
+          AWS_COGNITO_CLIENT_SECRET: ${{ secrets.AWS_COGNITO_CLIENT_SECRET }}
+          COGNITO_REGION: ${{ env.COGNITO_REGION }}
+        run: |
+          cd backend
+          echo CONTAINER IMAGE $CONTAINER_IMAGE_NAME
+          echo AWS S3 BUCKET $AWS_S3_BUCKET
+          echo SERVERLESS ACCESS KEY $SERVERLESS_ACCESS_KEY
+          serverless deploy --stage dev
